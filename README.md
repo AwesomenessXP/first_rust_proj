@@ -1,4 +1,5 @@
 # Integer Types
+- a *scalar* type is a single value: ints, floats, bools, chars
 - 8 bit: i8, u8
 - 16-bit: i16, u16
 ...

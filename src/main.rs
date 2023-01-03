@@ -81,7 +81,91 @@ fn main() {
 
     let x = plus_one(x);
 
-    println!("The value of x is: {x}")
+    println!("The value of x is: {x}");
+
+    // ------------- CONTROL FLOW ----------------------
+    let number = 7;
+    // the condition in an if/else statement is called an "arm"
+    if number < 5 {
+        println!("condition was true");
+    }
+    else {
+        println!("condition was false");
+    }
+
+    let number = 6;
+
+    if number % 4 == 0 {
+        println!("num divisible by 4");
+    }
+    else if number % 3 == 0 {
+        println!("num divisible by 3");
+    }
+
+    // you can use if in a let statement
+    let condition = true;
+    let number = if condition {5} else {6};
+
+    // you can return values from a loop!
+    let mut counter = 0;
+    let result = loop {
+        counter += 1;
+        if counter == 10 {
+            break counter * 2;
+        }
+    };
+    println!("The result is {result}");
+
+    // --------------- NESTED LOOPS -------------------
+    let mut count = 0;
+    // single apostrophe = loop label
+    'counting_up: loop { // outer loop with label
+        println!("count = {count}");
+        let mut remaining = 10;
+
+        'nested: loop { // inner loop without label
+            println!("remaining = {remaining}");
+            if remaining == 9 {
+                break 'nested;
+            }
+            if count == 2 {
+                break 'counting_up;
+            }
+            remaining -= 1;
+        }
+        count += 1;
+    }
+
+    // ------------- CONDITIONAL LOOPS WITH WHILE -----------------------
+    let mut number = 3;
+    while number != 0 {
+        println!("{number}!");
+        number -= 1; // you cannot use number--
+    }// while
+
+    println!("LIFTOFF!!");
+
+    // --------------- LOOPING THROUGH A COLLECTION --------------------
+    let a = [10, 20, 30, 40, 50];
+    let mut index = 0;
+
+    // NOT SAFE FOR ARRAYS!
+    while index < 5 { // program panicks when trying to access out of bounds
+        // when accessing index in array, place element after the comma!
+        println!("The value is {}", a[index]);
+        index += 1;
+    }// while
+
+    // SAFER FOR ARRAYS:
+    for elem in a {
+        println!("the value is: {elem}");
+    }
+
+    // to reverse a range in a collection:
+    for number in (1..4).rev() {
+        println!("{number}");
+    }
+    println!("LIFTOFF!!");
 }
 
 // YOU MUST include type of the parameters!
