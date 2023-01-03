@@ -94,3 +94,54 @@ let user2 = User {
 From the example, `user1.username` is now invalid because it transferred ownership to `user2.username`. However, `user1.email` is valid, because it DID NOT transfer ownership to `user2`. If we specified a different String for the username in `user2`, then `user1.email` would still be valid!
 
 Because the fields `active` and `sign_in_count` are fixed, and stored on the stack, the implement the `Copy` trait, so they are copied, rather than moved
+
+##### Tuple Structs
+```rust
+struct Color(i32, i32, i32);
+struct Point(i32, i32, i32);
+```
+Just like with tuples, you can destructure tuple structs, and use `.` to access its fields
+
+Unit-like structs look like this:
+```rust
+struct AlwaysEqual;
+let subject = AlwaysEqual;
+```
+You use this when you don't have data to store in the struct.
+
+##### Displaying structs
+```rust
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+let rect1 = Rectangle {
+    width: 30,
+    height: 50,
+};
+
+println!("rect1 is {}", rect1);
+```
+`println` macro can only properly print primitives. Structs are not primitive, and you can print them so many ways.
+Use `{:#?}` to use an output format `Debug`, but to do that, you need to specify an attribute `[derive(Debug)]`
+
+*You can also use `{:?}`, but the other format looks nicer* 
+
+Ex: 
+```rust
+#[derive(Debug)]
+struct Rectangle {
+  width: u32,
+  height: u32,
+}
+
+fn main() {
+  let rect1 = Rectangle {
+      width: 30,
+      height: 50,
+  };
+
+  println!("rect1 is {:?}", rect1);
+}
+```
