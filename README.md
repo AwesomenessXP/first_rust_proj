@@ -93,4 +93,4 @@ let user2 = User {
 ```
 From the example, `user1.username` is now invalid because it transferred ownership to `user2.username`. However, `user1.email` is valid, because it DID NOT transfer ownership to `user2`. If we specified a different String for the username in `user2`, then `user1.email` would still be valid!
 
-Because the fields `active` and `sign_in_count` are fixed, and stored on the stack, the implement the `Copy` trait, so they are copied, rather than moved.
+Because the fields `active` and `sign_in_count` are fixed, and stored on the stack, the implement the `Copy` trait, so they are copied, rather than moved
