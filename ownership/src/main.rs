@@ -52,6 +52,15 @@ fn main() {
     }
     let r2 = &mut s; // this is valid bc its in another scope
     println!("r2: {r2}");
+
+    // --------- DANGLING POINTERS ------------------
+    let reference_to_nothing = dangle();
+}
+
+fn dangle() -> &String {
+    let s = String::from("hello");
+    // &s -> once s is out of scope, it references nothing!
+    s
 }
 
 fn change(some_string: &mut String) {
