@@ -282,3 +282,30 @@ else {
   // dont do anything
 }
 ```
+
+# Modules
+This is how we organize code.
+
+Lets have a crate, backyard, contain all these files and directories:
+
+backyard
+├── Cargo.lock
+├── Cargo.toml
+└── src
+    ├── garden
+    │   └── vegetables.rs
+    ├── garden.rs
+    └── main.rs
+
+
+## Start from crate root
+Look for crate root (src/lib.rs or src/main.rs)
+
+## Declare modules
+To declare a new module: `mod garden;`
+
+## Declare submodules
+To declare submodules: `mod vegetables;` (same as modules)
+
+## Path to code in modules
+Once you have a module in your crate, you can refer to code from anywhere in the same crate. Ex: an `Asparagus` would be found in `crate::garden::vegetables::Asparagus`
