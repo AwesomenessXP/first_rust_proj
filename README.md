@@ -68,7 +68,7 @@ Structs are objects that hold multiple values. Creating an instance of a struct 
 
 All fields in a struct instance *must* be mutable!
 
-##### Creating a new instance from another instance
+## Creating a new instance from another instance
 ```rust
 let mut user1 = User {
     email: String::from("someone@example.com"),
@@ -95,11 +95,15 @@ From the example, `user1.username` is now invalid because it transferred ownersh
 
 Because the fields `active` and `sign_in_count` are fixed, and stored on the stack, the implement the `Copy` trait, so they are copied, rather than moved
 
-##### Tuple Structs
+## Tuple Structs
 ```rust
 struct Color(i32, i32, i32);
 struct Point(i32, i32, i32);
+
+let black = Color(0, 0, 0);
+let origin = Point(0, 0, 0);
 ```
+
 Just like with tuples, you can destructure tuple structs, and use `.` to access its fields
 
 Unit-like structs look like this:
@@ -109,7 +113,7 @@ let subject = AlwaysEqual;
 ```
 You use this when you don't have data to store in the struct.
 
-##### Displaying structs
+## Displaying structs
 ```rust
 struct Rectangle {
     width: u32,
@@ -151,7 +155,7 @@ A better way of debugging is using `dbg!` macro
 dbg!(&rect1);
 ```
 
-##### Method syntax
+## Method syntax
 A method is similar to a function. They can only be defined in a struct, enum, or trait object
 ```rust
 // this is an implementation block
@@ -164,7 +168,7 @@ impl Rectangle {
 ```
 IMPORTANT: METHODS MUST ALWAYS HAVE `&self` as the first parameter. `&self` is an alias for whatever `impl` is for. In this case, it means the `Rectangle` struct.
 
-##### Associated Functions
+## Associated Functions
 An *associated function* is also inside a `impl` block but doesn't have `&self` as the first parameter.
 ```rust
 // Self is a keyword that is an alias for Rectangle 
@@ -178,3 +182,103 @@ fn square(size: u32) -> Self {
 let sq = Rectangle::square(3);
 ```
 Use `::` to call associated functions.
+
+# Enums
+Enums: allow you to define a type by enumerating its possible *variants*
+```rust
+enum IpAddr { // this is the identifier
+  V4(String), // this is a variant, tells us what kind of ip addr it is
+  V6(String),
+}
+
+enum IpAddr { 
+    V4(u8, u8, u8, u8),
+    V6(String),
+}
+```
+Structs are like 'AND' combination of all fields. Enums are like 'OR' of individual variants. You can include enums in other enums.
+```rust
+// enums can have different types:
+enum Message {
+    Quit, // no data
+    Move {x: i32, y: i32}, // struct
+    Write(String), // String
+    ChangeColor(i32, i32, i32), // tuple structs
+}
+```
+The enum above is the same as saying the bottom:
+```rust
+struct QuitMessage; // unit struct
+struct MoveMessage {
+    x: i32,
+    y: i32,
+}
+struct WriteMessage(String); // tuple struct
+struct ChangeColorMessage(i32, i32, i32); // tuple struct
+```
+Notice how they are all variations (or *variants*) of the same type (Message), so why not use an enum to represent all the variants?
+
+Enums, like structs, can also define methods using `impl`:
+```rust
+// -- snip ---
+impl Message {
+  fn call(&self) {
+    // method body here
+  }
+}
+let m = Message::Write(String::from("hello"));
+m.call();
+```
+
+Rust does not have nulls, but has `Option<T>` which tells you if a value is present or not.
+```rust
+enum Option<T> {
+  None, // null
+  Some(T), // not null
+}
+```
+
+This gives us an error because `i8` is a different type than `Option<i8>`. With `Option<i8>`, there might not even be a *value* for it! So you have to convert `Option<T>` to `T` before actually using it!
+```rust
+let x: i8 = 5;
+let y: Option<i8> = Some(5);
+let sum = x + y;
+```
+
+## Matching with `Option<T>`
+A common pattern in Rust is using `match` against an enum, binding a variable to the data inside an enum, then executing code.
+How do we convert `Option<T>` to `T`?
+
+*Matches must be exhaustive.* If you have an arm Some(i), you also need a None arm. This means that matches are *exhuastive*: cover every valid possibility.
+
+## Catch-All Patterns
+Catch-all is like `default` value in a switch statement. 
+
+To catch-all and not bind to a value in an arm: `_`
+
+If you don't want the catch-all to do anything, return `()` (or nothing):
+```rust
+let dice_roll = 9;
+match dice_roll {
+  _ => (),
+}
+```
+
+## if let
+You use this when you want to only match one pattern, and ignore the rest
+
+```rust
+// long way
+match config_max {
+  Some(max) => println!("The maximum is configured to be {}", max),
+  _ => (),
+}
+
+// if let way
+if let Some(max) = config_max {
+  println!("The maximum is configured to be {}", max);
+}
+else { 
+  // dont do anything
+}
+```
