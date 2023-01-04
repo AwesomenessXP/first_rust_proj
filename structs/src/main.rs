@@ -13,12 +13,6 @@ struct Point(i32, i32, i32);
 // unit-like struct
 struct AlwaysEqual;
 
-#[derive(Debug)]
-struct Rectangle {
-    width: u32,
-    height: u32,
-}
-
 struct BuildUser {
     email: String,
     username: String,
@@ -74,16 +68,89 @@ fn main() {
 
     println!(
         "The area of the rectangle is {} square pixels.",
-        area(&rect1),
+        rect1.area(),
     );
 
+    // -------------- DEBUGGING STRUCTS ------------------------------------
     // println macro can only properly print primitives
     // structs are not primitive, and you can print them so many ways
     // use {:?} to use an output format Debug
-    println!("rect1 is {:#?}", rect1);
+    let scale = 2;
+    let rect1 = Rectangle {
+        width: dbg!(30 * scale),
+        height: 50,
+    };
+
+    println!("rect1 is {:#?}", rect1); // worse way of debugging
+    dbg!(&rect1); // better way of debugging
+    dbg!(30 * scale);
+
+    // --------- METHODS IN STRUCTS ---------------------------------------
+    // you can define methods inside structs
+    println!(
+        "The area of the rectangle is {} squre pixels.",
+        rect1.area(),
+    );
+
+    if rect1.width() {
+        println!("The rectangle has a nonzero width: {}", rect1.width);
+    }
+
+    // ---------- METHODS WITH MORE PARAMS ---------------------------------
+    let rect1 = Rectangle {
+        width: 30,
+        height: 50,
+    };
+    let rect2 = Rectangle {
+        width: 10, 
+        height: 40,
+    };
+    let rect3 = Rectangle {
+        width: 60,
+        height: 45,
+    };
+
+    println!("Can rect1 hold rect2?: {}", rect1.can_hold(&rect2));
+    println!("Can rect2 hold rect3?: {}", rect2.can_hold(&rect3));
+
+    let sq = Rectangle::square(3);
+    dbg!(sq);
 }
 
 // instead of passing two parameters, you can use tuples!
 fn area(dimensions: &Rectangle) -> u32 {
     dimensions.width * dimensions.height
+}
+
+#[derive(Debug)]
+struct Rectangle {
+    width: u32,
+    height: u32,
+}
+
+// this is an implementation block
+impl Rectangle {
+    // you NEED &self as the first parameter
+
+    // ---- METHODS -------------
+    fn area(&self) -> u32 { 
+        self.width * self.height
+    }
+
+    fn width(&self) -> bool {
+        self.width > 0
+    }
+
+    fn can_hold(&self, other: &Rectangle) -> bool {
+        self.width > other.width && self.height > other.height
+    }
+
+    // -------- ASSOCIATED CLASSES --------
+    // Self is a keyword that is an alias for Rectangle 
+    fn square(size: u32) -> Self {
+        Self {
+            width: size,
+            height: size,
+        }
+    }
 }
