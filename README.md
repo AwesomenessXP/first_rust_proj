@@ -142,6 +142,39 @@ fn main() {
       height: 50,
   };
 
-  println!("rect1 is {:?}", rect1);
+  println!("rect1 is {:#?}", rect1);
 }
 ```
+
+A better way of debugging is using `dbg!` macro
+```rust
+dbg!(&rect1);
+```
+
+##### Method syntax
+A method is similar to a function. They can only be defined in a struct, enum, or trait object
+```rust
+// this is an implementation block
+impl Rectangle {
+  // this is a method
+  fn area(&self) -> u32 {
+      self.width * self.height
+  }
+}
+```
+IMPORTANT: METHODS MUST ALWAYS HAVE `&self` as the first parameter. `&self` is an alias for whatever `impl` is for. In this case, it means the `Rectangle` struct.
+
+##### Associated Functions
+An *associated function* is also inside a `impl` block but doesn't have `&self` as the first parameter.
+```rust
+// Self is a keyword that is an alias for Rectangle 
+fn square(size: u32) -> Self {
+  Self {
+      width: size,
+      height: size,
+  }
+}
+
+let sq = Rectangle::square(3);
+```
+Use `::` to call associated functions.
