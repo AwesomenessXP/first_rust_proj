@@ -289,6 +289,7 @@ This is how we organize code.
 Lets have a crate, backyard, contain all these files and directories:
 
 backyard
+```rust
 ├── Cargo.lock
 ├── Cargo.toml
 └── src
@@ -296,6 +297,7 @@ backyard
     │   └── vegetables.rs
     ├── garden.rs
     └── main.rs
+```
 
 
 ## Start from crate root
