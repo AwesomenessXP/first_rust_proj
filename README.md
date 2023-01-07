@@ -288,8 +288,8 @@ This is how we organize code.
 
 Lets have a crate, backyard, contain all these files and directories:
 
-backyard
 ```rust
+backyard
 ├── Cargo.lock
 ├── Cargo.toml
 └── src
@@ -311,3 +311,107 @@ To declare submodules: `mod vegetables;` (same as modules)
 
 ## Path to code in modules
 Once you have a module in your crate, you can refer to code from anywhere in the same crate. Ex: an `Asparagus` would be found in `crate::garden::vegetables::Asparagus`
+
+## Creating a library crate
+Run `cargo new library_name --lib`
+
+## Nesting modules
+You can nest modules inside other modules with brackets
+
+Modules can hold definitions for structs, enums, constants, traits, and functions (like `.hpp` files)
+
+## Absolute and Relative paths
+```rust
+// mark this fn as public
+pub fn eat_at_restaurant() {
+  // Absolute path:
+  crate::front_of_house::hosting::add_to_waitlist();
+
+  // Relative path:
+  front_of_house::hosting::add_to_waitlist();
+}
+```
+Because `front_of_house` is already at the same level as `eat_at_restaurant` (its inside the file), you can use a relative path.
+
+## Private and public modules
+*Modules are also private by default.* Make sure you add `pub` to expose a module's inner code. You also need to add `pub` to the specific submodule to expose it. 
+
+However, if you make an enum public, all of its variants are public.
+
+Specifing `super` in the beginning of a relative path means you want to get a parent module.
+
+The `use` keyword only makes a shortcut at that specific scope. If you `use` a module outside of its scope, it is *invalid*. This is because `use` is *private by default*. If you want to export it so that parent modules can use it, you need to specify `pub use`.
+
+## Aliases
+When bringing in a module with `use`, we can also use `as` to create an alias for the module:
+```rust
+use std::fmt::Result;
+use std::io::Result as IoResult;
+
+fn function1() => IoResult<()> {}
+```
+
+## Using nested paths
+We can clean up the `use` statement if using nested items from the same module.
+
+This is inefficient:
+```rust
+use std::cmp::Ordering;
+use std::io;
+```
+
+Instead, we can use one line:
+```rust
+use std::{cmp::Ordering, io};
+```
+
+We can use nested paths at any level:
+```rust
+use std::io;
+use std::io::Write;
+```
+
+We can use `self` so a module can include itself:
+```rust
+// These are the same thing
+use std::io;
+use std::io::{self, Write};
+```
+
+You only need to load a file with `mod` only once. After that, every other file has to refer to the loaded file's location.
+
+# Collections
+## Vectors
+To make a new vector: 
+```rust
+let v: Vec<i32> = Vec::new();
+```
+
+To read elements, use `v.get(index)`. Another way is: `let third: &i32 = &v[index];`
+
+Using the `get()` method is preferred because the program doesnt crash, and returns a `None` enum.
+
+##### Mutability
+You cannot have mutable and immutable references, as stated by ownership rules.
+This will give an error:
+```rust
+let mut v = vec![1, 2, 3, 4, 5]; // this is mutable (remember we can only have one)
+
+let first = &v[0]; // this is an immutable reference (conflicts with our mutable reference)
+
+v.push(6);
+
+println!("The first element is: {first}");
+```
+This shows you cannot have immutable AND mutable references to a vector at the same time. Vectors put elements next to each other in the same memory location. If we make a reference to the first element, and push a new element to the end, it would give an error because the vector allocates elements to a *new* memory location, and now the reference points to deallocated memory (the old element isnt there anymore).
+
+##### Iterating over values
+To iterate over immutable references. Same thing applies to mutable references with `&mut`.
+```rust
+for i in &v {
+    println!("{i}");
+}
+```
+
+##### Storing enum variants in vectors
+We can store enum variants in vectors, but we must be explicit about their types. Remember, matches are exhaustive, so name every variant as an element. 

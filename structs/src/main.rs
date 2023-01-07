@@ -81,7 +81,7 @@ fn main() {
         height: 50,
     };
 
-    println!("rect1 is {:#?}", rect1); // worse way of debugging
+    println!("rect1 is {:#?}", &rect1); // worse way of debugging
     dbg!(&rect1); // better way of debugging
     dbg!(30 * scale);
 
