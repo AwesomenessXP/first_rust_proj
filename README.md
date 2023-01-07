@@ -415,3 +415,59 @@ for i in &v {
 
 ##### Storing enum variants in vectors
 We can store enum variants in vectors, but we must be explicit about their types. Remember, matches are exhaustive, so name every variant as an element. 
+
+## Strings
+There are two types of strings: string literals (`&str`), and the library `String`.
+
+To make a string literal into a `String`: 
+1. `let s = data.to_string();`
+2. `let s = String::from("initial comments");`
+
+##### Updating a string:
+```rust
+let mut s = String::from("foo");
+s.push_str("bar"); // append to the end of a String
+```
+
+##### Concatenating two Strings:
+You must transfer ownership of the first string to the new string, and append the next strings as references, or string literals.
+
+Using `+` operator:
+```rust
+let s1 = String::from("Hello, ");
+let s2 = String::from(" world!");
+let s3 = s1 + &s2;
+```
+
+(PREFERRED) Using `format!` macro:
+```rust
+let s1 = String::from("tic");
+let s2 = String::from("tac");
+let s3 = String::from("toe");
+
+let s = format!("{s1}-{s2}-{s3}");
+```
+
+##### Slicing strings:
+You cannot index a `String` type in rust. However, you make a string slice.
+
+We can use `[]` as a range tos make a string slice.
+```rust
+let s5 = "sdfsdf";
+let s = &s5[0..4]; // contain the first 4 bytes, 0 - 3, exclude 4
+println!("{s}");
+```
+
+Printing chars and bytes:
+```rust
+// chars
+for c in "Зд".chars() {
+    println!("{c}");
+}
+
+// bytes
+for b in "Зд".bytes() {
+    println!("{b}");
+}
+```
+
