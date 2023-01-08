@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 fn main() {
     // to create a new vector
     let v: Vec<i32> = Vec::new();
@@ -94,4 +96,51 @@ fn main() {
     for c in s.chars() {
         println!("{c}");
     }
+
+    // ------------- HASH MAPS ---------------------------------------------
+    let mut scores = HashMap::new();
+
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Yellow"), 50);
+
+    let team_name = String::from("Blue");
+
+    // unwrap_or sets the score to 0 if scores doesnt have an entry for the key
+    // copied() gets an Option<i32>, is a deep copy of an i32 value
+    let score = scores.get(&team_name).copied().unwrap_or(0);
+
+    // iterating over key/value pair in hash map
+    for (key, value) in &scores {
+        println!("{key}: {value}");
+    }
+
+    let field_name = String::from("Favorite color");
+    let field_value = String::from("Blue");
+
+    let mut map = HashMap::new();
+    map.insert(&field_name, &field_value);
+    let field = map.get(&field_name);
+    println!("{:?}", field.unwrap());
+    println!("{:?}", &field_name);
+
+    // ----------------- OVERWRITING A VALUE ---------------------------------
+    let mut scores = HashMap::new();
+    scores.insert(String::from("Blue"), 10);
+    scores.insert(String::from("Blue"), 25);
+
+    // insert a new key and value if there is no key yet:
+    scores.entry(String::from("Yellow")).or_insert(50);
+
+    println!("{:?}", scores);
+
+    let text = "hello world wonderful world";
+
+    let mut map = HashMap::new();
+
+    for word in text.split_whitespace() {
+        let count = map.entry(word).or_insert(0); // returns &mut V
+        *count += 1; // dereference count
+    }
+
+    println!("{:?}", map);
 }
